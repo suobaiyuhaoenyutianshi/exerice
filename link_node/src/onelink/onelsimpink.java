@@ -22,14 +22,14 @@ public class onelsimpink {
 
 
 // 头插法
-  /*  public onelsimpink(int x){
+    public onelsimpink(int x){
         first = new node(x,null);
     }
 
     public void addFirst(int x){
         first = new node(x,first);
     }
-*/
+
 
 
 
@@ -47,13 +47,13 @@ public class onelsimpink {
     }
 
     public static void main(String[] args) {
-    /*onelsimpink L = new onelsimpink(4);
+    onelsimpink L = new onelsimpink(4);
     L.addFirst(5);
     L.addFirst((10));
     L.addFirst(30);
     System.out.println("这是头插法的第一元素："+L.getFirst());
     L.printLink();
-*/
+
     }
 
 }

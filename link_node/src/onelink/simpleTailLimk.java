@@ -87,7 +87,7 @@ public class simpleTailLimk
         }
         this.linkNum--;
     }
-//啊啊
+//啊啊，试试
 // 辅助方法searchprevObiect,寻找对象的前个节点，以后还有用，如插入等，输入3,他就会返回第二节点
     private Node searchprevObject(int x){
         if(x < 1 || x >= this.linkNum){

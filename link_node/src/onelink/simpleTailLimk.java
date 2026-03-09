@@ -1,8 +1,5 @@
 package onelink;
 //保存
-//尝试1
-//尝试2
-//尝试3
 public class simpleTailLimk
 {
     private static class Node{
@@ -90,7 +87,7 @@ public class simpleTailLimk
         }
         this.linkNum--;
     }
-
+//啊啊，试试试试先搜索啊
 // 辅助方法searchprevObiect,寻找对象的前个节点，以后还有用，如插入等，输入3,他就会返回第二节点
     private Node searchprevObject(int x){
         if(x < 1 || x >= this.linkNum){

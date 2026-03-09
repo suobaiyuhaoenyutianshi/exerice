@@ -53,10 +53,6 @@ public class simpleTailLimk
             findObjct.next = null;
         }
         // 辅助方法searchObiect,寻找对象的前个节点
-       /* while(x != 0){
-            findObjct = findObjct.next;
-            x--;
-        }*/
         if(x != 0) {
             Node findPrevObjct = searchObject(x);
             //删除指定节点

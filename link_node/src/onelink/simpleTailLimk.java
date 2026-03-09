@@ -1,6 +1,7 @@
 package onelink;
 //保存
 //尝试1
+//尝试2
 public class simpleTailLimk
 {
     private static class Node{

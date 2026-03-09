@@ -44,4 +44,16 @@ public class simpleTailLimk
         L.paint();
         System.out.println("尾插的最后一元素："+L.last());
     }
+
+    //ok,再写个指定删除节点的
+    
+//十分丑陋，想用递归，还不如直接计数
+    private Node findNode(Node x){
+
+        if(x.next.next == null){
+            return x;
+        }
+        return findNode(x.next);
+    }
+
 }

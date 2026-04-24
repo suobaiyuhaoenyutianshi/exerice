@@ -1,63 +1,67 @@
 package graph;
-
 import java.util.*;
-
-//通过这个例子，你可以清楚看出：DAG 算法依赖拓扑顺序，因而必须有向无环；而 Dijkstra 不要求无环，但要求无负权边。两者各自解决了一类最短路问题。
 public class DAGSP<T> {
     private EdgeWeightedDigraph<T> G;
-    private int s;//起点对应的序号
-    private List<Integer> checkOrder; //拓扑顺序后 顶点顺序
-    private boolean[] marked;//checkOrder是否进去
+    private int s;
     private double[] disTo;
-    private IEdge<T>[] edgeTo;// 改成 IEdge 数组
+    private IEdge<T>[] edgeTo;
 
-    public DAGSP(EdgeWeightedDigraph<T> G,T v){
-        this.s = G.indexOf(v);
+    /**
+     * @param G         有向无环图
+     * @param start     起点
+     * @param topoAlgo  拓扑排序策略（注入 TopologicalOrder 的实现）
+     */
+    public DAGSP(EdgeWeightedDigraph<T> G, T start, TopologicalOrder<T> topoAlgo) {
         this.G = G;
-        checkOrder = new LinkedList<>();
-        marked =new boolean[G.V()];
-        disTo =new double[G.V()];
-        edgeTo =new IEdge[G.V()];
-        Arrays.fill(disTo,Double.POSITIVE_INFINITY);
+        this.s = G.indexOf(start);
+        disTo = new double[G.V()];
+        edgeTo = new IEdge[G.V()];
+        Arrays.fill(disTo, Double.POSITIVE_INFINITY);
         disTo[s] = 0;
-        Arrays.fill(marked,Boolean.valueOf(false));
 
-        //将G的顶点入checkOrder
-        dfs(G,v);
-        Collections.reverse(checkOrder);
-        //按这个顺序，每次访问个顶点,
-        for(int i:checkOrder){
-            int TCorrespond = checkOrder.get(i);//按顺序对应的
-            T correpondKey = G.getKey(TCorrespond);
-            for(IEdge<T> item:G.adj(correpondKey)){
-               relex(item,correpondKey);
+        // 通过接口获取拓扑顺序（内部已含环检测）
+        List<Integer> order = topoAlgo.getOrder(G);
+
+        // 按顺序松弛
+        for (int vIdx : order) {
+            if (disTo[vIdx] == Double.POSITIVE_INFINITY) continue; // 不可达
+            T from = G.getKey(vIdx);
+            for (IEdge<T> e : G.adj(from)) {
+                relax(e, from);
             }
         }
-
-
     }
-    private void relex(IEdge<T> item,T correpondKey){
-        int TCorrespond = G.indexOf(correpondKey);
-        T o = item.other(correpondKey);
-        int ONum = G.indexOf(o);
-        if(disTo[ONum] > disTo[TCorrespond] + item.weight()){
-            edgeTo[ONum] = item;
-            disTo[ONum] = disTo[TCorrespond] + item.weight();
+
+    private void relax(IEdge<T> e, T from) {
+        int u = G.indexOf(from);
+        T to = e.other(from);
+        int w = G.indexOf(to);
+        if (disTo[w] > disTo[u] + e.weight()) {
+            disTo[w] = disTo[u] + e.weight();
+            edgeTo[w] = e;
         }
     }
 
-
-    private void dfs(EdgeWeightedDigraph<T> G,T v ){
-        marked[G.indexOf(v)] = true;
-        for(IEdge<T> item:G.adj(v)){
-            T o = item.other(v);
-            int oNum = G.indexOf(o);
-            if(!marked[oNum]) {
-                dfs(G,o);
-            }
-
-        }
-        checkOrder.add(G.indexOf(v));
+    //
+    /** 返回从起点到顶点 v 的最短距离 */
+    public double distTo(T v) {
+        int idx = G.indexOf(v);
+        return disTo[idx];
     }
-
+    /** 是否存在从起点到顶点 v 的路径 */
+    public boolean hasPathTo(T v) {
+        int idx = G.indexOf(v);
+        return disTo[idx] < Double.POSITIVE_INFINITY;
+    }
+    /** 返回从起点到顶点 v 的最短路径（边的序列） */
+    public List<IEdge<T>> pathTo(T v){
+        int index = G.indexOf(v);
+        List<IEdge<T>> path = new ArrayList<>();
+        if(!hasPathTo(v)) return null;
+        for(int correspondNum = index;correspondNum != s;correspondNum = G.indexOf(edgeTo[correspondNum].other(G.getKey(correspondNum)))){
+            path.add(edgeTo[correspondNum]);
+        }
+        Collections.reverse(path);
+        return path;
+    }
 }

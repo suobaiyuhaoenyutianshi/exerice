@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class myKdTree {
     private Node root;//开头
@@ -26,13 +27,12 @@ public class myKdTree {
             return depth % dimens;
         }
         //返回与目标的坐标的该维度比较大小，大于0说明应是是本节点的右侧，right
-        public int compareSplitDim(double that[]){
+        public int compareSplitDim(double[] that){
             int spilitDem = spiltDim();
             return Double.compare(that[spilitDem], this.ponit[spilitDem]);
         }
         /** 当前节点到目标点的欧氏距离平方 */
-        public double distanceSquaredTo(Node that){
-            double[] thatPoint = that.ponit;
+        public double distanceSquaredTo(double[] thatPoint){
             double sum =0;
             for(int i = 0;i < dimens;i++){
                 double correspondDimData = ponit[i] - thatPoint[i];
@@ -75,9 +75,26 @@ public class myKdTree {
         } else if (comp < 0) {
             curr.left = insertHelp(point,curr.left,depth+1);
         }else {
+            if(curr.left == null && curr.right == null){
+                if(new Random().nextBoolean()){
+                    curr.left = insertHelp(point,curr.left,depth+1);
+                }
+                else {
+                    curr.right = insertHelp(point,curr.right,depth+1);
+                }
+            } else if (curr.right != null && curr.left == null) {
+                curr.right = insertHelp(point,curr.right,depth+1);
+            } else if (curr.left != null && curr.right == null) {
+                curr.left = insertHelp(point,curr.left,depth+1);
+            }else if (curr.right != null && curr.left != null){
+                if(new Random().nextBoolean()){
+                    curr.left = insertHelp(point,curr.left,depth+1);
+                }
+                else {
+                    curr.right = insertHelp(point,curr.right,depth+1);
+                }
+            }
 
-                // 完全相等的情况：可以选择替换或者忽略。这里简单忽略重复点。
-                // 实际应用可能需要存储重复或更新值。
         }
         return curr;
 
@@ -110,15 +127,66 @@ public class myKdTree {
 
 
     /** 返回距离查询点最近的点（若树空则返回 null） */
-    public
+    public double[] nearest(double[] goal){
+        //方便与再递归与传递中修改，数组引用！
+        double[] bestDist = new double[]{Double.POSITIVE_INFINITY};//最近距离
+        Node[] BestNode = new Node[1];//最近节点
+        nearestHelp(root,goal,bestDist,BestNode);
+
+        return  BestNode[0].ponit;
+    }
+
+    private void nearestHelp(Node curr,double[] goal,double[] bestDist,Node[] BestNode) {
+        if (curr == null) return;
+        //有没有什么方式使若currTogoal==0，直接全部跳出
+        double currTogoal = curr.distanceSquaredTo(goal);
+        if (bestDist[0] > currTogoal) {
+            bestDist[0] = currTogoal;
+            BestNode[0] = curr;
+        } else if (dimeShotDist(goal, curr) > bestDist[0]) {
+            return;
+        }
+        //分倾向那个方向👉right
+        int comp = curr.compareSplitDim(goal);
+        Node BestSide;
+        Node badSide;
+        if (comp > 0) {
+            BestSide = curr.right;
+            badSide = curr.left;
+        } else if (comp < 0) {
+            BestSide = curr.left;
+            badSide = curr.right;
+        } else {//相等为0，则随机
+            boolean flag = new Random().nextBoolean();
+            if (flag) {
+                BestSide = curr.right;
+                badSide = curr.left;
+            } else {
+                BestSide = curr.left;
+                badSide = curr.right;
+            }
+        }//
+
+        nearestHelp(BestSide,goal,bestDist,BestNode);
+        //再返回后，探索bad,因为dimeShotDist,，不符和会返回的，不用写判断
+        nearestHelp(badSide,goal,bestDist,BestNode);
+
+    }
 
 
 
+    private double dimeShotDist(double[] goal,Node curr){
+        int spilitNum = curr.spiltDim();
+        double Dimeshort = curr.ponit[spilitNum] - goal[spilitNum];
+        return Dimeshort * Dimeshort ;
+    }
 
 
-
-
-
+    static void main(String[] args){
+        myKdTree test = new myKdTree(2);
+        test.insert(new double[]{3,1});
+        test.insert(new double[]{3,2});
+    }
 
 
 

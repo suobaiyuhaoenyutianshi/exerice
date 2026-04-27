@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-//总结，这是我能想到比较合适的：一个接点包含下个节点的信息;父节点只用null来说明存在信息，本身信息在自己的节点中
+////总结，这是我能想到比较合适的：一个接点包含下个节点的信息;父节点只用null来说明存在信息，本身信息在自己的节点中
 public class TrieSet {
     private class Node{
         private boolean isKey;//取出的问题

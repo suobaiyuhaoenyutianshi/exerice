@@ -37,7 +37,7 @@ public class KruskalMST<T> {
                 MSTedges.add(edge);
             }
 
-        }//
+        }///
     }
 
     public Iterable<IEdge<T>> edges(){

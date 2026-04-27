@@ -20,4 +20,4 @@ public interface IEdge<T> extends Comparable<IEdge<T>> {
     default int compareTo(IEdge<T> that) {
         return Double.compare(this.weight(), that.weight());
     }
-}//
+}///

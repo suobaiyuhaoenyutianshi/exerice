@@ -2,7 +2,7 @@ package graph;
 /**
  * 带权有向边（也可用于无向图，只需添加时两个方向各加一次）
  * 带权边与带权图
- */
+ *///
 public class Edge<T> implements Comparable<Edge>{
     private final T v;
     private final T w;

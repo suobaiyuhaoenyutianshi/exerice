@@ -13,7 +13,7 @@ public class KahnTopologicalSort<T> implements TopologicalOrder<T> {
                 inDegree[graph.indexOf(e)]++;
             }
         }
-        // 初始化队列,将一开始度数为0的0加进去
+        // /初始化队列,将一开始度数为0的0加进去
         Queue<Integer> initpq= new LinkedList<>();
         for(int i = 0;i< V;i++){
             if(inDegree[i] == 0){

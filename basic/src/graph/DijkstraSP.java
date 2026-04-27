@@ -16,7 +16,7 @@ public class DijkstraSP<T> {
             this.dist = d;
         }
 
-    }
+    }//
     @SuppressWarnings("uncheck")
     private double[] disTo;//距离
     private IEdge<T>[] edgeTo;//最短路径对应的边

@@ -23,7 +23,7 @@ public class BreadthFirstPaths<T> {
         this.s = G.findCorrspondence(v);
         edgeTo = new int[G.V()];
         disTo[s] = 0;
-        bfs(G,v);//
+        bfs(G,v);///
     }
     private void bfs(Graph<T> G ,T v){
         Queue<T> q = new LinkedList<>();

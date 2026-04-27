@@ -203,4 +203,4 @@ public class KdTree {
         Point2D nearest = tree.nearest(query);
         System.out.println("Nearest to " + query + " is " + nearest);
     }
-}
+}//

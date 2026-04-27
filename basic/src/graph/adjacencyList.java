@@ -77,4 +77,4 @@ public class adjacencyList<T> implements Graph<T>{
     }
 
 }
-//错了，顶点数知道，不能改，回去修改
+//错了，顶点数知道，不能改，回去修改//

@@ -50,3 +50,4 @@ public class Edge<T> implements Comparable<Edge>{
     //天然的无向边，但实际上有向还是无向是由图的adj决定，实际这只是说它天然适合无向，但也可以有向，但就麻烦了
 
 }
+//

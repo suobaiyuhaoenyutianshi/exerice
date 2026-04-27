@@ -21,7 +21,7 @@ public class depthFirstPaths<T> {
         this.s =correspondNum(v) ;//起点对应的
         distTo[s] = 0;
         dfs(G,v);
-    }
+    }//
     //通过对象T找到对应的序号，尤其是为edgeTo
     private int correspondNum(T v){
         return corrspondence.get(v);

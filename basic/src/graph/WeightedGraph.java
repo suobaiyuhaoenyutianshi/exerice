@@ -63,4 +63,4 @@ public interface WeightedGraph<T> {
      * @return 内部序号，-1 表示不存在
      */
     int indexOf(T v);
-}
+}//

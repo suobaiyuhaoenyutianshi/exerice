@@ -70,30 +70,11 @@ public class myKdTree {
 
         }
         int comp = curr.compareSplitDim(point);
-        if(comp > 0){
+        if(comp >= 0){
             curr.right = insertHelp(point,curr.right,depth+1);
         } else if (comp < 0) {
             curr.left = insertHelp(point,curr.left,depth+1);
         }else {
-            if(curr.left == null && curr.right == null){
-                if(new Random().nextBoolean()){
-                    curr.left = insertHelp(point,curr.left,depth+1);
-                }
-                else {
-                    curr.right = insertHelp(point,curr.right,depth+1);
-                }
-            } else if (curr.right != null && curr.left == null) {
-                curr.left = insertHelp(point,curr.left,depth+1);
-            } else if (curr.left != null && curr.right == null) {
-                curr.right = insertHelp(point,curr.right,depth+1);
-            }else if (curr.right != null && curr.left != null){
-                if(new Random().nextBoolean()){
-                    curr.left = insertHelp(point,curr.left,depth+1);
-                }
-                else {
-                    curr.right = insertHelp(point,curr.right,depth+1);
-                }
-            }
 
         }
         return curr;
@@ -146,7 +127,7 @@ public class myKdTree {
                 return true;
             }
         } else if (dimeShotDist(goal, curr) > bestDist[0]) {
-            return;
+            return false;
         }
         //分倾向那个方向👉right
         int comp = curr.compareSplitDim(goal);
@@ -169,13 +150,17 @@ public class myKdTree {
             }
         }//
 
-        nearestHelp(BestSide,goal,bestDist,BestNode);
+        if(nearestHelp(BestSide,goal,bestDist,BestNode)){
+            return true;
+        }
         //再返回后，探索bad,因为dimeShotDist,，不符和会返回的，不用写判断,写判断只是为了节省开支
-        if (bestDist[0] > dimeShotDist(goal, badSide)) {
-            nearestHelp(badSide,goal,bestDist,BestNode);
+        if (badSide != null &&bestDist[0] > dimeShotDist(goal, badSide)) {
+            if( nearestHelp(badSide,goal,bestDist,BestNode)){
+                return false;
+            }
         }
 
-
+    return false;
     }
 
 
@@ -202,3 +187,4 @@ public class myKdTree {
 
 
 }
+//

@@ -12,3 +12,4 @@ public interface Graph<T> {
     T getVertex(int index);
     public int findCorrspondence(T v);
 }
+//

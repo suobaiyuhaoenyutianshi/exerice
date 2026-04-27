@@ -14,3 +14,4 @@ import java.util.List;
 public interface TopologicalOrder<T> {
     List<Integer> getOrder(EdgeWeightedDigraph<T> graph);
 }
+//

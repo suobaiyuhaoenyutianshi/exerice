@@ -50,7 +50,7 @@ public class PrimMST<T> {
             }
         }
 
-    }
+    }//
     /** 松弛：检查边 e（从 v 出发）是否提供到达 w 的更小横跨权重 */
     private void relex(IEdge<T> item ,T Tvertex){
         T o = item.other(Tvertex);

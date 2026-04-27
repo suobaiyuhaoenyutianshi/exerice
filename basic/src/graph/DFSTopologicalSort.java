@@ -58,4 +58,4 @@ public class DFSTopologicalSort<T> implements TopologicalOrder<T> {
  ↓    │
  C    │
  ↓    │
- D ───┘*/
+ D ───┘*///

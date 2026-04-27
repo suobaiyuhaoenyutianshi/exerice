@@ -1,7 +1,14 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class myKdTree {
     private Node root;//开头
     private int size;//一共多少节点
     private final int dimens; //多少维度
+    private int insertSinceRebuild;          // 自上次重建以来插入的新点数
+    private static final double REBUILD_RATIO = 0.5; // 阈值比例（新点占当前大小的比例）
+    private static final int    MIN_REBUILD  = 10;    // 最少重建间隔，避免小树频繁重建
     /**一个节点要有很多功能：深度->得应该比较的维度，// 左/右子树（或下/上子树）该节点存储的点 double[]
      比较目标点与当前节点在划分维度上的大小
      计算当前节点到目标点的欧几里得距离平方（避免开方）
@@ -40,19 +47,27 @@ public class myKdTree {
     public myKdTree(int dimens){
         this.root = null;
         this.dimens =dimens;
+        this.size = 0;
+        this.insertSinceRebuild = 0;
     }
     public int size() { return size; }
     public boolean isEmpty() { return size == 0; }
     //插入
     public void insert(double[] point){
-        Node fatherNode =null;
-        Node fath
         root = insertHelp(point,root,0);
+        //自动检查是否需要重建
+        if (insertSinceRebuild >= MIN_REBUILD &&
+                insertSinceRebuild >= size * REBUILD_RATIO) {
+                rebuild();   // 触发全量打乱重建
+        }
     }
     //传的是当前节点,父节点，父节点的父节点
     private Node insertHelp(double[] point,Node curr,int depth){
         if(curr == null){
+            size++;
+            insertSinceRebuild++;
             return new Node(point,depth);
+
         }
         int comp = curr.compareSplitDim(point);
         if(comp > 0){
@@ -69,12 +84,33 @@ public class myKdTree {
     }
 
 
+    /** 收集当前树中所有点，打乱，清空，重新插入 */
+    private void rebuild(){
+        List<double[]> allPoints = new ArrayList<>();
+        collectAll(root,allPoints);
+        //打乱
+        Collections.shuffle(allPoints);
+        //清空
+        this.size =0;
+        this.insertSinceRebuild = 0;
+        root = null;
+        //重新插入，因为insertSinceRebuild为0，不会触发
+        for (double[] p : allPoints) {
+            root = insertHelp(p, root, 0);
+            size++;
+        }
+    }
+
+    private void collectAll(Node node,List<double[]> container ){
+        if(node == null) return;
+        container.add(node.ponit);
+        collectAll(node.left,container);
+        collectAll(node.right,container);
+    }
 
 
-
-
-
-
+    /** 返回距离查询点最近的点（若树空则返回 null） */
+    public
 
 
 

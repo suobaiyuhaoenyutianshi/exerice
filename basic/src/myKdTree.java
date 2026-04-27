@@ -83,9 +83,9 @@ public class myKdTree {
                     curr.right = insertHelp(point,curr.right,depth+1);
                 }
             } else if (curr.right != null && curr.left == null) {
-                curr.right = insertHelp(point,curr.right,depth+1);
-            } else if (curr.left != null && curr.right == null) {
                 curr.left = insertHelp(point,curr.left,depth+1);
+            } else if (curr.left != null && curr.right == null) {
+                curr.right = insertHelp(point,curr.right,depth+1);
             }else if (curr.right != null && curr.left != null){
                 if(new Random().nextBoolean()){
                     curr.left = insertHelp(point,curr.left,depth+1);
@@ -114,7 +114,6 @@ public class myKdTree {
         //重新插入，因为insertSinceRebuild为0，不会触发
         for (double[] p : allPoints) {
             root = insertHelp(p, root, 0);
-            size++;
         }
     }
 
@@ -136,13 +135,16 @@ public class myKdTree {
         return  BestNode[0].ponit;
     }
 
-    private void nearestHelp(Node curr,double[] goal,double[] bestDist,Node[] BestNode) {
-        if (curr == null) return;
+    private boolean nearestHelp(Node curr,double[] goal,double[] bestDist,Node[] BestNode) {
+        if (curr == null) return false;
         //有没有什么方式使若currTogoal==0，直接全部跳出
         double currTogoal = curr.distanceSquaredTo(goal);
         if (bestDist[0] > currTogoal) {
             bestDist[0] = currTogoal;
             BestNode[0] = curr;
+            if (bestDist[0] == 0.0) {
+                return true;
+            }
         } else if (dimeShotDist(goal, curr) > bestDist[0]) {
             return;
         }
@@ -168,8 +170,11 @@ public class myKdTree {
         }//
 
         nearestHelp(BestSide,goal,bestDist,BestNode);
-        //再返回后，探索bad,因为dimeShotDist,，不符和会返回的，不用写判断
-        nearestHelp(badSide,goal,bestDist,BestNode);
+        //再返回后，探索bad,因为dimeShotDist,，不符和会返回的，不用写判断,写判断只是为了节省开支
+        if (bestDist[0] > dimeShotDist(goal, badSide)) {
+            nearestHelp(badSide,goal,bestDist,BestNode);
+        }
+
 
     }
 
@@ -185,7 +190,12 @@ public class myKdTree {
     static void main(String[] args){
         myKdTree test = new myKdTree(2);
         test.insert(new double[]{3,1});
+        test.insert(new double[]{6,1});
+        test.insert(new double[]{6,2});
+        test.insert(new double[]{5,2});
         test.insert(new double[]{3,2});
+        test.insert(new double[]{3,3});
+        double[]a =test.nearest(new double[]{3,2});
     }
 
 
